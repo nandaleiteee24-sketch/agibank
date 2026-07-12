@@ -1,25 +1,501 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>RotaFácil - Gestão de Rotas e Agendamentos</title>
-    
-    <!-- Favicon --> 
-    <link rel="icon" type="image/png" href="/brand/rotafacil-pin.png" />
-    <link rel="apple-touch-icon" href="/brand/rotafacil-pin.png" />
-    
-    <!-- Meta tags -->
-    <meta name="description" content="Sistema completo de roteirização e gestão de agendamentos para equipes técnicas" />
-    <meta name="theme-color" content="#EAB308" />
-    <script type="module" crossorigin src="/assets/index-C860UpGr.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/leaflet-C4krET5p.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-B1ow1nQx.css">
-  </head>
-  <body>
-    <div id="root"></div>
-    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style id="goldencross-vars-inline">:root {
+  --color-brand-primary: #0f1c2e;
+  --color-brand-secondary: #1a3a5c;
+  --color-brand-accent: #00c6ff;
+  --color-brand-accent-hover: #00a8e8;
+  --color-brand-gold: #f0a500;
+  --color-bg-dark: #080e17;
+  --color-bg-darker: #05090f;
+  --color-bg-card: #0d1b2a;
+  --color-bg-surface: #13243a;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a8b8cc;
+  --color-text-muted: #6b8099;
+  --color-error-live: #ff4d4f;
+  --font-primary: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", sans-serif;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 9999px;
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --container-max: 1280px;
+  --header-h: 148px;
+  --shadow-glow-accent: 0 0 40px rgba(0, 198, 255, 0.12);
+}
+</style><meta name='robots' content='max-image-preview:large, index, follow, max-snippet, max-video-preview' />
+<link rel="icon" type="image/png" sizes="32x32" href="https://goldencross.com.br/wp-content/uploads/2026/04/favicon-1.png">
+<link rel="apple-touch-icon" href="https://goldencross.com.br/wp-content/uploads/2026/04/favicon-1.png">
+<meta name="theme-color" content="#080E17">
+<style id="critical-css">/* GoldenCross — acima da dobra (inline no head; resto em style.min.css) */
+body{margin:0;background:var(--color-bg-dark);color:var(--color-text-primary);font-family:var(--font-primary);-webkit-font-smoothing:antialiased}
+/* —— do style.min.css (base + header + botões + hero) —— */
+/* GoldenCross — layout global + redesign home */
+body.has-fixed-header{padding-top:var(--header-h)}
+body.home-hero-film.has-fixed-header{padding-top:0!important}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15}
+a{color:var(--color-brand-accent)}
+a:hover{color:var(--color-brand-accent-hover)}
+.container{max-width:var(--container-max);margin:0 auto;padding:0 1.5rem}
+.container-narrow{max-width:720px}
+.skip-link{position:absolute;top:-100%;left:0;background:var(--color-brand-accent);color:#fff;padding:.75rem 1.5rem;z-index:9999;font-weight:600}
+.skip-link:focus{top:0}
+:focus-visible{outline:2px solid var(--color-brand-accent);outline-offset:3px}
 
-  </body>
+/* —— Header —— */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);transition:background .3s ease,border-color .3s ease,box-shadow .3s ease,backdrop-filter .3s ease;-webkit-backdrop-filter:blur(0)}
+body:not(.home-hero-film) .site-header{background:rgba(8,14,23,.98);border-bottom:1px solid rgba(255,255,255,.06);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+body:not(.home-hero-film) .site-header.is-scrolled{box-shadow:0 4px 24px rgba(0,0,0,.35)}
+.home-hero-film .site-header:not(.is-scrolled){background:transparent;border-bottom:1px solid transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+.home-hero-film .site-header.is-scrolled{background:rgba(8,14,23,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.header-inner{max-width:var(--container-max);margin:0 auto;padding:0 1.5rem;height:100%;display:flex;align-items:center;gap:1rem;position:relative}
+.header-logo{display:flex;align-items:center;flex-shrink:0;line-height:0}
+.header-logo img,.header-logo .custom-logo-link img{display:block;height:min(96px,calc(var(--header-h) - 22px));max-height:min(96px,calc(var(--header-h) - 22px));width:auto;max-width:min(92vw,560px);object-fit:contain;object-position:left center;filter:drop-shadow(0 2px 10px rgba(0,0,0,.92)) drop-shadow(0 0 2px rgba(255,255,255,.18))}
+.site-logo img,.custom-logo,.custom-logo-link img.custom-logo{display:block;height:72px;width:auto;max-width:280px;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.92)) drop-shadow(0 0 2px rgba(255,255,255,.18))}
+.menu-toggle{display:none;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:0;margin-left:auto;background:transparent;border:0;border-radius:8px;cursor:pointer;color:#fff}
+.menu-toggle-bar{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .2s ease,opacity .2s ease}
+.header-nav{display:flex;flex:1;justify-content:flex-end;margin-right:.5rem}
+.header-nav-list{display:flex;align-items:center;gap:.25rem;list-style:none;margin:0;padding:0;flex-wrap:wrap;justify-content:flex-end}
+.header-nav-list>li{margin:0}
+.nav-link{display:block;padding:.5rem .875rem;font-size:.9375rem;font-weight:500;color:rgba(255,255,255,.75);text-decoration:none;border-radius:8px;transition:background .2s ease,color .2s ease;white-space:nowrap}
+.nav-link:hover,.nav-link:focus,.header-nav-list .current-menu-item>a,.nav-link[aria-current="page"]{color:#fff;background:rgba(255,255,255,.06)}
+.header-cta{margin-left:.25rem;padding:.5rem 1.25rem;border-radius:var(--radius-full);font-size:.9375rem;font-weight:600;text-decoration:none;white-space:nowrap;color:#fff;background:linear-gradient(90deg,#00c6ff,#0072ff);box-shadow:0 4px 15px rgba(0,198,255,.3);transition:filter .2s ease,transform .2s ease,box-shadow .2s ease}
+.header-cta:hover,.header-cta:focus,.header-cta:focus-visible{color:#fff;filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,198,255,.4)}
+@media(max-width:1024px){
+  .menu-toggle{display:flex}
+  .header-inner{padding:0 .85rem;gap:.55rem}
+  .header-logo img,.header-logo .custom-logo-link img{max-width:min(62vw,220px);height:auto;max-height:54px}
+  .header-nav{position:absolute;top:100%;left:0;right:0;display:none;flex-direction:column;align-items:stretch;padding:1rem 1.5rem 1.25rem;margin:0;background:rgba(8,14,23,.98);border-bottom:1px solid rgba(255,255,255,.06)}
+  .header-nav.nav-open{display:flex}
+  .header-nav-list{flex-direction:column;align-items:stretch;gap:0}
+  .nav-link{border-radius:6px;padding:.75rem 1rem}
+  .header-cta{display:none}
+}
+body.nav-is-open{overflow:hidden}
+@media(max-width:768px){
+  :root{--header-h:92px}
+  .header-logo img,.header-logo .custom-logo-link img{height:min(84px,calc(var(--header-h) - 18px));max-height:min(84px,calc(var(--header-h) - 18px));width:auto;max-width:min(88vw,480px);object-fit:contain;object-position:left center}
+}
+@media(max-width:480px){
+  .header-inner{padding:0 .7rem}
+  .header-logo img,.header-logo .custom-logo-link img{max-width:min(58vw,190px);max-height:48px}
+  .menu-toggle{width:40px;height:40px}
+}
+
+/* —— Botões —— */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.75rem 1.75rem;border-radius:var(--radius-full);font-weight:600;font-size:1rem;text-decoration:none;border:none;cursor:pointer;transition:filter .2s ease,transform .2s ease,box-shadow .2s ease}
+.btn-primary{color:#fff;background:linear-gradient(90deg,#00c6ff,#0072ff);box-shadow:0 4px 18px rgba(0,198,255,.28)}
+.btn-primary:hover,.btn-primary:focus,.btn-primary:focus-visible{color:#fff;filter:brightness(1.08);transform:translateY(-1px)}
+.btn-secondary{color:var(--color-brand-accent);border:1.5px solid rgba(0,198,255,.55);background:transparent}
+.btn-secondary:hover{background:rgba(0,198,255,.08)}
+.btn-lg{padding:.9rem 2rem;font-size:1.05rem}
+.btn-badge{display:inline-block;margin-left:.35rem;padding:.15rem .5rem;border-radius:var(--radius-full);font-size:.75rem;font-weight:700;background:rgba(0,198,255,.15);border:1px solid rgba(0,198,255,.35);color:#00c6ff}
+.btn-tag{display:inline-block;margin-left:.35rem;padding:.15rem .5rem;border-radius:var(--radius-full);font-size:.75rem;font-weight:700;background:rgba(0,198,255,.15);border:1px solid rgba(0,198,255,.35);color:#00c6ff}
+
+/* —— Hero —— */
+.hero-section{position:relative;width:100%;min-height:100svh;min-height:100vh;display:flex;align-items:center;justify-content:flex-start;overflow:hidden;padding:0;background:linear-gradient(160deg,#060a10 0%,#0d1b2a 45%,#152a45 100%)}
+img.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;z-index:0}
+.hero-overlay{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(105deg,rgba(4,10,18,.9) 0%,rgba(4,12,20,.72) 38%,rgba(4,14,24,.48) 62%,rgba(3,8,16,.25) 100%)}
+.hero-overlay-top{position:absolute;top:0;left:0;right:0;height:140px;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(4,10,18,.55) 0%,transparent 100%)}
+.hero-inner{position:relative;z-index:2;width:100%;max-width:var(--container-max);margin:0 auto;padding:calc(var(--header-h) + .25rem) clamp(1.15rem,3.5vw,1.75rem) clamp(1.25rem,4vh,2.25rem);box-sizing:border-box}
+.hero-body{display:flex;flex-direction:column;align-items:flex-start;text-align:left;max-width:36rem}
+.hero-badge{display:inline-flex;align-items:center;gap:.45rem;margin:0 0 .75rem;padding:.4rem .85rem .4rem .65rem;border-radius:999px;font-size:.7rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#00e5f0;background:rgba(0,229,240,.1);border:1px solid rgba(0,229,240,.35)}
+.hero-badge-icon{display:flex;color:#00e5f0;opacity:.95}
+.hero-title{font-size:clamp(2.05rem,4vw,3.45rem);font-weight:800;line-height:1.06;color:#fff;margin:0 0 .85rem;letter-spacing:-.03em;text-shadow:0 1px 10px rgba(0,0,0,.28)}
+.hero-title__block{display:block}
+.hero-title__block + .hero-title__block{margin-top:.08em}
+.hero-title__accent{color:#00e5f0}
+.hero-lead{font-size:clamp(.95rem,1.55vw,1.125rem);line-height:1.62;color:rgba(255,255,255,.82);margin:0 0 .5rem;max-width:31rem}
+a.hero-domain{display:inline-block;font-size:.9rem;font-weight:600;color:#00d4e8;margin:0 0 1.35rem;text-decoration:none;opacity:.95;letter-spacing:.02em}
+a.hero-domain:hover{text-decoration:underline;opacity:1}
+.hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1rem;margin:0 0 1.1rem;width:100%;max-width:28rem}
+.hero-actions__primary{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.5rem;font-weight:700;box-shadow:0 8px 32px rgba(0,198,255,.35)}
+.hero-actions__arrow{flex-shrink:0;opacity:.95}
+.hero-actions__ghost{display:inline-flex;align-items:center;gap:.5rem;color:#fff;border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.04)}
+.hero-actions__ghost:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(0,229,240,.55)}
+.hero-actions__pill{margin-left:.15rem;padding:.2rem .5rem;border-radius:999px;font-size:.7rem;font-weight:800;background:rgba(0,229,240,.18);border:1px solid rgba(0,229,240,.4);color:#9ff8ff}
+.hero-micro{display:flex;flex-wrap:wrap;gap:.65rem 1.25rem;list-style:none;margin:0;padding:0;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.62)}
+.hero-micro li{display:inline-flex;align-items:center;gap:.35rem}
+.hero-micro li::before{content:"✓";color:#00c6ff;font-size:.85em;font-weight:800}
+.hero-footnote{font-size:.65rem;line-height:1.5;color:rgba(255,255,255,.38);margin:.85rem 0 0;max-width:30rem}
+@media(max-width:768px){
+  .hero-overlay{background:linear-gradient(180deg,rgba(5,10,20,.88) 0%,rgba(5,10,20,.75) 45%,rgba(5,10,20,.55) 100%)}
+  .hero-actions{flex-direction:column;align-items:stretch;max-width:100%}
+  .hero-actions__primary,.hero-actions__ghost{width:100%;justify-content:center}
+}
+.home-hero-film .site-header:not(.is-scrolled) .nav-link{color:rgba(255,255,255,.92)}
+.home-hero-film .site-header:not(.is-scrolled) .nav-link:hover,.home-hero-film .site-header:not(.is-scrolled) .nav-link:focus,.home-hero-film .site-header:not(.is-scrolled) .header-nav-list .current-menu-item>a{color:#fff;background:rgba(255,255,255,.1)}
+.home-hero-film .site-header:not(.is-scrolled) .header-cta{box-shadow:0 4px 22px rgba(0,198,255,.35)}
+</style>
+<title>Teste IPTV Grátis 6 Horas | GoldenCross</title>
+<meta name="description" content="Solicite seu teste IPTV grátis por 6 horas e experimente canais em 4K, filmes e séries sem precisar de cartão de crédito.">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta property="og:site_name" content="Golden Cross IPTV">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Teste IPTV Grátis 6 Horas | GoldenCross">
+<meta property="og:description" content="Solicite seu teste IPTV grátis por 6 horas e experimente canais em 4K, filmes e séries sem precisar de cartão de crédito.">
+<meta property="og:url" content="https://goldencross.com.br/teste-iptv/">
+<meta property="og:image" content="https://goldencross.com.br/wp-content/uploads/2026/04/logotipo-goldencross-iptv-1.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@goldencrossiptv">
+<meta name="twitter:title" content="Teste IPTV Grátis 6 Horas | GoldenCross">
+<meta name="twitter:description" content="Solicite seu teste IPTV grátis por 6 horas e experimente canais em 4K, filmes e séries sem precisar de cartão de crédito.">
+<meta name="twitter:image" content="https://goldencross.com.br/wp-content/uploads/2026/04/logotipo-goldencross-iptv-1.png">
+<link rel="canonical" href="https://goldencross.com.br/teste-iptv/">
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://goldencross.com.br/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fgoldencross.com.br%2Fteste-iptv%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://goldencross.com.br/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fgoldencross.com.br%2Fteste-iptv%2F&#038;format=xml" />
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://goldencross.com.br/#website","url":"https://goldencross.com.br/","name":"GoldenCross IPTV","description":"O melhor IPTV do Brasil com canais ao vivo em 4K, suporte 24h e teste grátis.","inLanguage":"pt-BR","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://goldencross.com.br/?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://goldencross.com.br/#organization","name":"GoldenCross IPTV","url":"https://goldencross.com.br/","logo":{"@type":"ImageObject","url":"https://goldencross.com.br/wp-content/uploads/2026/04/logotipo-goldencross-iptv-1.png","width":200,"height":60},"areaServed":"BR","sameAs":[],"contactPoint":[{"@type":"ContactPoint","contactType":"customer service","availableLanguage":"pt-BR","telephone":"+5511999999999","email":"contato@goldencross.com.br"}]},{"@type":"LocalBusiness","@id":"https://goldencross.com.br/#localbusiness","name":"GoldenCross IPTV","url":"https://goldencross.com.br/","image":"https://goldencross.com.br/wp-content/uploads/2026/04/logotipo-goldencross-iptv-1.png","logo":"https://goldencross.com.br/wp-content/uploads/2026/04/logotipo-goldencross-iptv-1-small.png","description":"GoldenCross IPTV: serviço de televisão por internet com canais ao vivo em 4K, suporte 24h e teste grátis de 6 horas.","telephone":"+5511999999999","email":"contato@goldencross.com.br","priceRange":"$$","areaServed":{"@type":"Country","name":"Brasil"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.8","reviewCount":"2847","bestRating":"5","worstRating":"1"},"contactPoint":{"@type":"ContactPoint","contactType":"customer service","availableLanguage":"Portuguese","contactOption":"TollFree","hoursAvailable":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"00:00","closes":"23:59"}},"parentOrganization":{"@id":"https://goldencross.com.br/#organization"}},{"@type":"SiteNavigationElement","@id":"https://goldencross.com.br/#sitenav","name":["Home","IPTV","Planos","Teste IPTV","Blog","Perguntas Frequentes","Quem Somos","Contato"],"url":["https://goldencross.com.br/","https://goldencross.com.br/iptv/","https://goldencross.com.br/planos/","https://goldencross.com.br/teste-iptv/","https://goldencross.com.br/blog/","https://goldencross.com.br/perguntas-frequentes/","https://goldencross.com.br/quem-somos/","https://goldencross.com.br/contato/"]},{"@type":"ItemList","@id":"https://goldencross.com.br/#primary-links","name":"Páginas principais GoldenCross IPTV","itemListOrder":"https://schema.org/ItemListOrderAscending","numberOfItems":7,"itemListElement":[{"@type":"ListItem","position":1,"name":"Teste IPTV Grátis","url":"https://goldencross.com.br/teste-iptv/"},{"@type":"ListItem","position":2,"name":"Planos IPTV","url":"https://goldencross.com.br/planos/"},{"@type":"ListItem","position":3,"name":"Guia Completo de IPTV","url":"https://goldencross.com.br/iptv/"},{"@type":"ListItem","position":4,"name":"Perguntas Frequentes","url":"https://goldencross.com.br/perguntas-frequentes/"},{"@type":"ListItem","position":5,"name":"Quem Somos","url":"https://goldencross.com.br/quem-somos/"},{"@type":"ListItem","position":6,"name":"Blog IPTV","url":"https://goldencross.com.br/blog/"},{"@type":"ListItem","position":7,"name":"Contato","url":"https://goldencross.com.br/contato/"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Quanto tempo dura o teste IPTV grátis?","acceptedAnswer":{"@type":"Answer","text":"O período padrão é de 6 horas com acesso amplo para avaliação completa."}},{"@type":"Question","name":"Precisa de cartão de crédito para testar?","acceptedAnswer":{"@type":"Answer","text":"Não. O teste é liberado sem cobrança e sem cadastro de cartão."}},{"@type":"Question","name":"Quais conteúdos entram no teste?","acceptedAnswer":{"@type":"Answer","text":"Canais ao vivo, parte do catálogo VOD e recursos principais da plataforma."}},{"@type":"Question","name":"Posso testar em Smart TV?","acceptedAnswer":{"@type":"Answer","text":"Sim, o suporte orienta a configuração em Smart TV e demais dispositivos compatíveis."}},{"@type":"Question","name":"Como solicitar o teste rapidamente?","acceptedAnswer":{"@type":"Answer","text":"Entre em contato pelo WhatsApp oficial e informe o dispositivo que você utiliza."}},{"@type":"Question","name":"Posso testar em mais de um dispositivo?","acceptedAnswer":{"@type":"Answer","text":"Na maioria dos casos, sim. Informe ao suporte quais aparelhos deseja validar."}}]},{"@type":"Service","name":"Teste IPTV Grátis 6 Horas — GoldenCross","description":"Teste gratuito de 6 horas do serviço IPTV GoldenCross com acesso completo a canais ao vivo, VOD e suporte para configuração.","provider":{"@type":"Organization","name":"GoldenCross IPTV","url":"https://goldencross.com.br"},"offers":{"@type":"Offer","price":"0","priceCurrency":"BRL","name":"Teste IPTV Grátis","availability":"https://schema.org/InStock","validFrom":"2026-01-01"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.8","reviewCount":"2847","bestRating":"5","worstRating":"1"}},{"@type":"Offer","itemOffered":{"@type":"Product","name":"Assinatura IPTV GoldenCross"},"availability":"https://schema.org/InStock","priceCurrency":"BRL"},{"@type":"WebPage","@id":"https://goldencross.com.br/teste-iptv/#webpage","url":"https://goldencross.com.br/teste-iptv/","name":"Teste IPTV &#8211; Golden Cross IPTV","isPartOf":{"@id":"https://goldencross.com.br/#website"},"about":{"@id":"https://goldencross.com.br/#organization"},"inLanguage":"pt-BR","dateModified":"2026-04-22T23:27:18-03:00","datePublished":"2026-04-19T16:02:46-03:00"},{"@type":"ImageObject","@id":"https://goldencross.com.br/teste-iptv/#primaryimage","contentUrl":"https://goldencross.com.br/wp-content/uploads/2026/04/logotipo-goldencross-iptv-1.png","name":"GoldenCross IPTV Logo","caption":"GoldenCross IPTV"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://goldencross.com.br/"},{"@type":"ListItem","position":2,"name":"Teste IPTV &#8211; Golden Cross IPTV","item":"https://goldencross.com.br/teste-iptv/"}]}]}</script>
+<style id="wp-img-auto-sizes-contain-inline-css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+
+
+<link rel="preload" href="https://goldencross.com.br/wp-content/themes/goldencross/assets/fonts/fonts.css?ver=1.0.11" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://goldencross.com.br/wp-content/themes/goldencross/assets/fonts/fonts.css?ver=1.0.11"></noscript>
+<link rel='stylesheet' id='goldencross-style-css' href='https://goldencross.com.br/wp-content/themes/goldencross/assets/css/style.min.css?ver=1.0.11' media='all' />
+<style id="goldencross-style-inline-css">
+.gc-page-editor p{margin:0 0 1em}.gc-page-editor p:last-child{margin-bottom:0}.page-hero__meta{margin:.75rem 0 0;font-size:.95rem;color:var(--color-text-secondary)}.faq-answer p{margin:.5em 0 0}.faq-answer p:first-child{margin-top:0}.about-inline-stats{margin-top:1rem}
+/*# sourceURL=goldencross-style-inline-css */
+</style>
+<link rel="preload" href="https://goldencross.com.br/wp-content/themes/goldencross/assets/css/mobile-layout.css?ver=1.0.11" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://goldencross.com.br/wp-content/themes/goldencross/assets/css/mobile-layout.css?ver=1.0.11"></noscript>
+<link rel='stylesheet' id='goldencross-page-hero-premium-css' href='https://goldencross.com.br/wp-content/themes/goldencross/assets/css/page-hero-premium.css?ver=1.0.11' media='all' />
+<link rel="https://api.w.org/" href="https://goldencross.com.br/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://goldencross.com.br/wp-json/wp/v2/pages/9" /><link rel="canonical" href="https://goldencross.com.br/teste-iptv/" />
+<link rel='shortlink' href='https://goldencross.com.br/?p=9' />
+<link rel="icon" href="https://goldencross.com.br/wp-content/uploads/2026/04/cropped-favicon-1-1-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://goldencross.com.br/wp-content/uploads/2026/04/cropped-favicon-1-1-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://goldencross.com.br/wp-content/uploads/2026/04/cropped-favicon-1-1-180x180.png" />
+<meta name="msapplication-TileImage" content="https://goldencross.com.br/wp-content/uploads/2026/04/cropped-favicon-1-1-270x270.png" />
+</head>
+<body class="wp-singular page-template page-template-templates page-template-template-teste-iptv page-template-templatestemplate-teste-iptv-php page page-id-9 wp-custom-logo wp-theme-goldencross has-fixed-header">
+<a class="skip-link" href="#main-content">Ir para o conteúdo principal</a>
+<header class="site-header" role="banner">
+    <div class="header-inner">
+                <a class="header-logo brand" href="https://goldencross.com.br/" aria-label="GoldenCross IPTV — página inicial">
+            <img
+                src="https://goldencross.com.br/wp-content/uploads/2026/04/logotipo-goldencross-iptv-1-small.png"
+                width="320"
+                height="118"
+                                                alt="Logo oficial GoldenCross IPTV premium"
+                decoding="async"            >
+        </a>
+        <button type="button" class="menu-toggle" aria-controls="primary-navigation" aria-expanded="false" aria-label="Abrir ou fechar menu de navegação">
+            <span class="menu-toggle-bar" aria-hidden="true"></span>
+            <span class="menu-toggle-bar" aria-hidden="true"></span>
+            <span class="menu-toggle-bar" aria-hidden="true"></span>
+        </button>
+        <nav class="header-nav" id="primary-navigation" role="navigation" aria-label="Navegação principal">
+            <ul id="menu-menu-principal" class="header-nav-list"><li id="menu-item-14" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-14"><a href="https://goldencross.com.br/" class="nav-link">Home</a></li>
+<li id="menu-item-15" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15"><a href="https://goldencross.com.br/iptv/" class="nav-link">IPTV</a></li>
+<li id="menu-item-16" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-9 current_page_item menu-item-16"><a href="https://goldencross.com.br/teste-iptv/" aria-current="page" class="nav-link">Teste IPTV</a></li>
+<li id="menu-item-17" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17"><a href="https://goldencross.com.br/planos/" class="nav-link">Planos</a></li>
+<li id="menu-item-18" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-18"><a href="https://goldencross.com.br/perguntas-frequentes/" class="nav-link">Perguntas Frequentes</a></li>
+<li id="menu-item-19" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-19"><a href="https://goldencross.com.br/quem-somos/" class="nav-link">Quem Somos</a></li>
+<li id="menu-item-20" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-20"><a href="https://goldencross.com.br/contato/" class="nav-link">Contato</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom"><a class="nav-link" href="https://goldencross.com.br/blog/">Blog</a></li></ul>        </nav>
+        <a class="header-cta" href="https://encurtai.me/goldencross" target="_blank" rel="noopener noreferrer">Assinar agora</a>
+    </div>
+</header>
+<main id="main-content" role="main">
+<div class="page-shell">
+    <header class="page-hero page-hero--premium" role="banner">
+        <div class="page-hero__inner">
+            <span class="page-hero-eyebrow">Avaliação sem compromisso</span>
+            <h1 class="page-hero-title">Teste IPTV grátis 6 horas com ativação imediata</h1>
+            <p class="page-hero-subtitle">Canais ao vivo, VOD e desempenho real na sua internet e no seu aparelho — o passo certo antes de assinar.</p>
+                            <p class="page-hero__meta">6 horas de teste</p>
+                    </div>
+    </header>
+
+    <section class="section-block section-dark gc-test-why6" aria-labelledby="gc-why6-heading">
+        <div class="container container--article">
+            <div class="inner-panel">
+                <h2 id="gc-why6-heading">Por que 6 horas é o tempo certo para avaliar</h2>
+                <p class="gc-test-why6__lead">Testes mais longos não significam mais informação — significam mais tempo antes de você ter a resposta que precisa. Em 6 horas, você valida tudo que importa.</p>
+                <div class="gc-test-why6__grid">
+                    <article class="gc-test-why6__card">
+                        <span class="gc-test-why6__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"></circle><path d="M10 8l6 4-6 4z"></path></svg></span>
+                        <h3>Canais ao vivo validados</h3>
+                        <p>Abra 5 canais diferentes em horários distintos. Você vê abertura, buffer e qualidade de áudio em minutos.</p>
+                    </article>
+                    <article class="gc-test-why6__card">
+                        <span class="gc-test-why6__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 8h18v11H3z"></path><path d="M7 8V5h10v3"></path><path d="M8 13h.01M12 13h.01M16 13h.01"></path></svg></span>
+                        <h3>VOD testado na prática</h3>
+                        <p>Inicie 2 filmes e 1 série. Fluidez de VOD é imediata — não precisa de dias para aparecer.</p>
+                    </article>
+                    <article class="gc-test-why6__card">
+                        <span class="gc-test-why6__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l4 2"></path><path d="M8 4l-2 2"></path></svg></span>
+                        <h3>Horário de pico coberto</h3>
+                        <p>6 horas num fim de semana cobrem o horário de maior carga. Se funciona nesse janela, funciona.</p>
+                    </article>
+                </div>
+                <p class="gc-test-why6__highlight">Teste de 7 dias não avalia melhor — apenas adia sua decisão. Quem sabe o que está entregando não precisa de uma semana para provar.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-block section-dark">
+        <div class="container container--article">
+            <div class="inner-panel page-prose">
+                <p>Se você está pesquisando <strong>teste IPTV</strong>, <strong>teste IPTV grátis</strong> ou <strong>teste IPTV 6 horas</strong>, esta página resume exatamente o que esperar do período de avaliação na GoldenCross e como transformar esse teste em uma decisão segura de assinatura.</p>
+                <p>O teste IPTV existe para responder três perguntas que nenhuma landing page substitui: o serviço roda bem na <em>sua</em> rede? O app funciona bem no <em>seu</em> dispositivo? A estabilidade se mantém nos horários em que <em>você</em> realmente assiste? Quando essas três respostas são positivas, a chance de satisfação pós-compra aumenta drasticamente.</p>
+
+                <h2>O que está incluído no teste IPTV</h2>
+                <ul>
+                                                                                            <li>Acesso ao catálogo principal de canais IPTV ao vivo.</li>
+                                                                                                    <li>Conteúdo on demand com filmes e séries para testar fluidez de VOD.</li>
+                                                                                                    <li>Qualidade Full HD e 4K em canais compatíveis com seu aparelho e internet.</li>
+                                                                                                    <li>Suporte para configuração inicial e validação de player.</li>
+                                                                                        </ul>
+                <p>Durante o período de teste IPTV 6 horas, você consegue validar abertura de canais, tempo de buffer ao trocar de canal, estabilidade em horários de maior uso e qualidade de áudio/vídeo. Para quem busca IPTV sem travamento, esse é o momento de “estressar” o serviço com uso real, não apenas abrir um canal por alguns segundos.</p>
+
+                <h2>Como solicitar seu teste IPTV grátis</h2>
+                <div class="gc-test-steps" aria-label="Passos para solicitar o teste">
+                    <article class="gc-test-step">
+                        <span class="gc-test-step__num" aria-hidden="true">1</span>
+                        <h3>Fale no WhatsApp</h3>
+                        <p>Informe seu dispositivo e quando quer começar. Resposta em minutos.</p>
+                    </article>
+                    <article class="gc-test-step">
+                        <span class="gc-test-step__num" aria-hidden="true">2</span>
+                        <h3>Receba e configure</h3>
+                        <p>Credenciais chegam por WhatsApp com o passo a passo para o seu aparelho específico.</p>
+                    </article>
+                    <article class="gc-test-step">
+                        <span class="gc-test-step__num" aria-hidden="true">3</span>
+                        <h3>Avalie com critério</h3>
+                        <p>Use o Checklist abaixo para garantir que você testou tudo que importa.</p>
+                    </article>
+                </div>
+                <p class="gc-test-steps__cta-wrap"><a class="btn btn-primary" href="https://encurtai.me/goldencross" target="_blank" rel="noopener noreferrer">Solicitar teste agora</a></p>
+                <p>Quanto mais informações você enviar (modelo da TV, sistema operacional, app que pretende usar), mais rápido o time consegue indicar a configuração ideal. Isso reduz tentativa e erro e melhora a primeira impressão do serviço.</p>
+
+                <h2>Por que fazer o teste IPTV antes de assinar</h2>
+                <p>O teste IPTV permite validar compatibilidade real com seu aparelho, qualidade de imagem no seu ambiente e estabilidade da reprodução nos horários em que você realmente assiste TV. Essa etapa reduz risco de contratação e melhora a assertividade na escolha do plano ideal.</p>
+                <p>Além da parte técnica, o teste ajuda a entender navegação, organização da grade de canais IPTV e funcionamento dos recursos de vídeo sob demanda. Você transforma a decisão de compra em uma escolha baseada em experiência prática.</p>
+                <p>Se você também quer comparar conteúdo e entender conceitos, leia o <a href="https://goldencross.com.br/iptv/">guia completo sobre IPTV</a> e depois retome o teste com perguntas mais específicas para o suporte.</p>
+
+                <h2>Dispositivos compatíveis para o teste IPTV</h2>
+                <p>O teste costuma funcionar bem em IPTV para Smart TV (Samsung/LG/Android TV), IPTV para celular (Android/iOS), computadores e TV Box. Em cada plataforma, o player recomendado pode mudar; por isso, o suporte personaliza a orientação.</p>
+                <p>Se você pretende usar lista IPTV M3U, informe isso no primeiro contato. O time pode indicar players mais estáveis e evitar configurações que aumentam latência ou causam parsing lento em listas grandes.</p>
+
+                <h2>Depoimentos de quem testou e assinou</h2>
+                <div class="mini-quote-grid">
+                    <blockquote class="mini-quote"><strong>André, Fortaleza:</strong> “Usei o teste IPTV 6 horas num sábado com jogo ao vivo. Mantive estável e fechei o plano na segunda.”</blockquote>
+                    <blockquote class="mini-quote"><strong>Patrícia, Porto Alegre:</strong> “Queria IPTV 4K na TV da sala. O teste mostrou que meu Wi-Fi era o gargalo; passei cabo e melhorou 100%.”</blockquote>
+                </div>
+
+                <h2>Checklist do teste perfeito</h2>
+                <p class="gc-test-checklist__lead">Marque cada item conforme for testando. Quando todos estiverem marcados, você tem evidência suficiente para decidir.</p>
+                <div class="gc-test-checklist" id="gc-test-checklist">
+                                            <label class="gc-test-checklist__item" for="gc-check-0">
+                            <input type="checkbox" id="gc-check-0" class="gc-test-checklist__checkbox">
+                            <span>Abri pelo menos 5 canais ao vivo diferentes</span>
+                        </label>
+                                            <label class="gc-test-checklist__item" for="gc-check-1">
+                            <input type="checkbox" id="gc-check-1" class="gc-test-checklist__checkbox">
+                            <span>Testei um canal de esporte em transmissão real (não intervalo)</span>
+                        </label>
+                                            <label class="gc-test-checklist__item" for="gc-check-2">
+                            <input type="checkbox" id="gc-check-2" class="gc-test-checklist__checkbox">
+                            <span>Iniciei um filme no VOD e assisti pelo menos 10 minutos</span>
+                        </label>
+                                            <label class="gc-test-checklist__item" for="gc-check-3">
+                            <input type="checkbox" id="gc-check-3" class="gc-test-checklist__checkbox">
+                            <span>Troquei de canal 3 vezes seguidas e observei o tempo de abertura</span>
+                        </label>
+                                            <label class="gc-test-checklist__item" for="gc-check-4">
+                            <input type="checkbox" id="gc-check-4" class="gc-test-checklist__checkbox">
+                            <span>Testei no dispositivo principal que vou usar na assinatura</span>
+                        </label>
+                                            <label class="gc-test-checklist__item" for="gc-check-5">
+                            <input type="checkbox" id="gc-check-5" class="gc-test-checklist__checkbox">
+                            <span>Testei no horário de maior uso da minha casa (noite ou fim de semana)</span>
+                        </label>
+                                            <label class="gc-test-checklist__item" for="gc-check-6">
+                            <input type="checkbox" id="gc-check-6" class="gc-test-checklist__checkbox">
+                            <span>Verifiquei se o áudio estava sincronizado com o vídeo</span>
+                        </label>
+                                            <label class="gc-test-checklist__item" for="gc-check-7">
+                            <input type="checkbox" id="gc-check-7" class="gc-test-checklist__checkbox">
+                            <span>Observei se houve buffering espontâneo em algum canal</span>
+                        </label>
+                                            <label class="gc-test-checklist__item" for="gc-check-8">
+                            <input type="checkbox" id="gc-check-8" class="gc-test-checklist__checkbox">
+                            <span>Testei em pelo menos 2 dispositivos diferentes (se aplicável)</span>
+                        </label>
+                                            <label class="gc-test-checklist__item" for="gc-check-9">
+                            <input type="checkbox" id="gc-check-9" class="gc-test-checklist__checkbox">
+                            <span>Conversei com o suporte pelo menos uma vez durante o teste</span>
+                        </label>
+                                        <div class="gc-test-checklist__done" id="gc-test-checklist-done">
+                        Checklist completo. Você tem todas as informações para decidir com segurança.
+                        <a href="https://goldencross.com.br/planos/">Ver planos disponíveis →</a>
+                    </div>
+                </div>
+                <script>
+                (function () {
+                    var box = document.getElementById('gc-test-checklist');
+                    var done = document.getElementById('gc-test-checklist-done');
+                    if (!box || !done) return;
+                    var checks = box.querySelectorAll('.gc-test-checklist__checkbox');
+                    function refresh() {
+                        var allChecked = true;
+                        for (var i = 0; i < checks.length; i++) {
+                            if (!checks[i].checked) { allChecked = false; break; }
+                        }
+                        done.style.display = allChecked ? 'block' : 'none';
+                    }
+                    for (var j = 0; j < checks.length; j++) {
+                        checks[j].addEventListener('change', refresh);
+                    }
+                    refresh();
+                })();
+                </script>
+            </div>
+
+            <div class="inner-panel faq-stack" aria-labelledby="teste-faq-heading">
+                <h2 id="teste-faq-heading" class="faq-category-title">Perguntas sobre o teste grátis</h2>
+                <details><summary>Preciso instalar aplicativo específico?</summary><p>Depende do dispositivo. A equipe envia a indicação correta para Smart TV, celular e TV Box.</p></details>
+                <details><summary>O teste IPTV inclui conteúdo esportivo?</summary><p>Sim, o objetivo do teste é apresentar a qualidade de diferentes tipos de conteúdo.</p></details>
+                <details><summary>Posso falar com suporte durante o teste?</summary><p>Sim, o suporte acompanha configuração e uso inicial para você ter avaliação completa.</p></details>
+                <details><summary>Depois do teste, como faço para assinar?</summary><p>Basta falar com o atendimento e escolher o plano mais adequado ao seu perfil.</p></details>
+                <details><summary>Posso testar em mais de um dispositivo?</summary><p>Na maioria dos casos, sim. Informe ao suporte quais aparelhos deseja validar.</p></details>
+                <details><summary>O teste IPTV 6 horas é suficiente?</summary><p>Sim. Em 6 horas normalmente é possível avaliar canais ao vivo, VOD, qualidade e estabilidade em diferentes horários.</p></details>
+            </div>
+        </div>
+    </div>
+
+    <section class="cta-strip" aria-label="Pedir teste">
+        <div class="cta-strip__inner">
+            <p class="cta-strip-lead">Fale no WhatsApp e receba orientação personalizada para o seu aparelho.</p>
+            <a class="btn btn-primary btn-lg" href="https://encurtai.me/goldencross" target="_blank" rel="noopener noreferrer">Solicitar teste IPTV no WhatsApp</a>
+            <a class="btn btn-secondary btn-lg" href="https://encurtai.me/goldencross" target="_blank" rel="noopener noreferrer">Ver planos IPTV</a>
+        </div>
+    </section>
+</div>
+</main>
+<footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+        <div class="container footer-grid">
+            <div class="footer-col footer-col--brand">
+                <a class="footer-brand" href="https://goldencross.com.br/">
+                    <img
+                        src="https://goldencross.com.br/wp-content/uploads/2026/04/logotipo-goldencross-iptv-1-thumb.png"
+                        width="220"
+                        height="81"
+                                                                        alt="Logo GoldenCross IPTV com suporte 24h"
+                        decoding="async"
+                        loading="lazy"
+                    >
+                </a>
+                <p class="footer-about">IPTV confiável com suporte 24h, canais ao vivo em alta qualidade e experiência estável para Smart TV, celular e PC.</p>
+                            </div>
+
+            <nav class="footer-col" aria-labelledby="footer-nav-heading">
+                <h2 id="footer-nav-heading" class="footer-col__title">Navegação</h2>
+                <ul class="footer-links">
+                    <li><a href="https://goldencross.com.br/">Home IPTV</a></li>
+                                        <li><a href="https://goldencross.com.br/blog/">Blog IPTV</a></li>
+                                        <li><a href="https://goldencross.com.br/iptv/">Guia completo de IPTV</a></li>
+                    <li><a href="https://goldencross.com.br/quem-somos/">Quem somos</a></li>
+                    <li><a href="https://goldencross.com.br/perguntas-frequentes/">Perguntas frequentes</a></li>
+                    <li><a href="https://encurtai.me/goldencross" target="_blank" rel="noopener noreferrer">Contato</a></li>
+                </ul>
+            </nav>
+
+            <nav class="footer-col" aria-labelledby="footer-svc-heading">
+                <h2 id="footer-svc-heading" class="footer-col__title">Serviços</h2>
+                <ul class="footer-links">
+                    <li><a href="https://encurtai.me/goldencross" target="_blank" rel="noopener noreferrer">Teste IPTV grátis</a></li>
+                    <li><a href="https://encurtai.me/goldencross" target="_blank" rel="noopener noreferrer">Planos IPTV</a></li>
+                </ul>
+            </nav>
+
+            <div class="footer-col" aria-labelledby="footer-contact-heading">
+                <h2 id="footer-contact-heading" class="footer-col__title">Contato</h2>
+                <p class="footer-contact-line"><a href="mailto:contato@goldencross.com.br">contato@goldencross.com.br</a></p>
+                <p class="footer-contact-line"><a href="https://encurtai.me/goldencross" rel="noopener noreferrer" target="_blank">WhatsApp</a></p>
+                <p class="footer-contact-meta">24 horas</p>
+                <p class="footer-contact-note">Seus dados são tratados com segurança, em conformidade com a LGPD.</p>
+            </div>
+
+            <nav class="footer-col" aria-labelledby="footer-legal-heading">
+                <h2 id="footer-legal-heading" class="footer-col__title">Legal</h2>
+                <ul class="footer-links">
+                    <li><a href="https://goldencross.com.br/termos-de-uso/">Termos de uso</a></li>
+                    <li><a href="https://goldencross.com.br/politica-de-privacidade/">Política de privacidade</a></li>
+                    <li><a href="https://goldencross.com.br/lgpd/">LGPD</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p class="footer-copy">
+                © 2026 GoldenCross IPTV. Todos os direitos reservados.            </p>
+        </div>
+    </div>
+</footer>
+<div class="gc-lgpd-banner" id="gc-lgpd-banner" role="dialog" aria-live="polite" aria-label="Consentimento de cookies e privacidade" hidden>
+    <div class="gc-lgpd-banner__inner">
+        <p class="gc-lgpd-banner__text">
+            Usamos cookies essenciais e tecnologias similares para melhorar sua experiência e medir desempenho.
+            Ao continuar, você concorda com nossa
+            <a href="https://goldencross.com.br/politica-de-privacidade/">Política de privacidade</a>.
+        </p>
+        <div class="gc-lgpd-banner__actions">
+            <button type="button" class="gc-lgpd-banner__btn gc-lgpd-banner__btn--secondary" data-gc-consent="reject">Recusar</button>
+            <button type="button" class="gc-lgpd-banner__btn gc-lgpd-banner__btn--primary" data-gc-consent="accept">Aceitar</button>
+        </div>
+    </div>
+</div>
+<script>
+(function () {
+    var key = 'gc_lgpd_consent_v1';
+    var banner = document.getElementById('gc-lgpd-banner');
+    if (!banner) return;
+
+    try {
+        var saved = localStorage.getItem(key);
+        if (!saved) {
+            banner.hidden = false;
+        }
+    } catch (e) {
+        banner.hidden = false;
+    }
+
+    var buttons = banner.querySelectorAll('[data-gc-consent]');
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function () {
+            var value = this.getAttribute('data-gc-consent') || 'accept';
+            try { localStorage.setItem(key, value); } catch (e) {}
+            banner.hidden = true;
+        });
+    }
+})();
+</script>
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/goldencross/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script id="goldencross-main-js" defer src="https://goldencross.com.br/wp-content/themes/goldencross/assets/js/main.min.js?ver=1.0.11"></script>
+<script id="goldencross-lazy-js" defer src="https://goldencross.com.br/wp-content/themes/goldencross/assets/js/lazy-load.min.js?ver=1.0.11"></script>
+<a href="https://encurtai.me/goldencross" class="gc-float-wa" target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp" title="Abrir WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.84 11.84 0 0012.06 0C5.5.01.17 5.34.16 11.9c0 2.1.55 4.14 1.6 5.95L0 24l6.33-1.66a11.9 11.9 0 005.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.48-8.42zM12.07 21.4h-.01a9.9 9.9 0 01-5.05-1.39l-.36-.21-3.77.99 1.01-3.67-.24-.37a9.86 9.86 0 01-1.52-5.26c.01-5.45 4.45-9.88 9.9-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 012.9 6.99c0 5.45-4.44 9.88-9.88 9.88zm5.4-7.02c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51-.17 0-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.07.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.08-.12-.27-.2-.57-.35z"/></svg>
+</a>
+    </body>
 </html>
